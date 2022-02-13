@@ -2,43 +2,92 @@
 	<v-container class="wrapper">
 		<video ref="videoStream" autoplay style="display: none"></video>
 		<video ref="videoPreview" autoplay controls width="600" style="display: none"></video>
-		<div class="canvas-wrapper"><canvas ref="canvas"></canvas></div>
+		<div class="canvas-wrapper">
+			<div class="overflow">
+				<canvas ref="canvas"></canvas>
+			</div>
+			<button @click="askForWindow" class="window-button"></button>
+			<span class="duration-span">{{ duration }}</span>
+		</div>
 		<div class="control-wrapper">
-			<span>{{ duration }}</span>
 			<recordButton v-model="startRecord" @toggle="toggleRecording()" :disabled="!videoStreamSrc" />
-			<v-btn @click="askForWindow" class="window-button">Change Window</v-btn>
+			<!-- <v-btn @click="askForWindow" class="window-button">Change Window</v-btn> -->
 		</div>
 	</v-container>
 </template>
 
 <style scoped>
 	canvas {
-		width: 1000px;
-		background: #272727;
+		width: 1250px;
+		height: 703.13px;
 		display: block;
+		background: #272727;
 	}
-	.window-button {
-		margin-top: 15px;
+	.canvas-wrapper .overflow {
+		overflow: auto;
+		max-width: 80vw;
+		max-height: 80vh;
+	}
+	.canvas-wrapper {
+		border: solid gray;
+		border-width: 20px 20px 35px 20px;
+		box-sizing: content-box;
+		border-radius: 15px;
+		position: relative;
+		background: #272727;
+	}
+
+	.canvas-wrapper .window-button {
+		content: "";
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		background: lightgray;
+		left: calc(50% - 10px);
+		bottom: -27.5px;
+		border-radius: 50%;
+		transition: all 100ms ease;
+	}
+
+	.canvas-wrapper .duration-span {
+		position: absolute;
+		bottom: -30px;
+		color: lightgray;
+		right: 0;
+	}
+
+	.canvas-wrapper .window-button:hover {
+		box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.2), 0 0 10px 4px rgba(37, 21, 255, 0.2),
+			0 0 16px 6px rgba(27, 209, 255, 0.2);
 	}
 	.wrapper {
 		display: flex;
 		justify-content: center;
 		flex-direction: column;
 		align-items: center;
-		gap: 20px;
-	}
-	.canvas-wrapper {
-		overflow: auto;
-		max-width: 80vw;
-		max-height: 80vh;
+		height: calc(100% - 35px);
 	}
 
 	.control-wrapper {
+		background: lightgray;
 		display: flex;
 		justify-content: center;
 		flex-direction: column;
 		align-items: center;
-		gap: 15px;
+		gap: 5px;
+		padding: 20px;
+		position: relative;
+	}
+
+	.control-wrapper::after {
+		width: 500px;
+		max-width: 90vw;
+		height: 35px;
+		bottom: -35px;
+		background: #272727;
+		content: "";
+		position: absolute;
+		border-radius: 20px 20px 0px 0px;
 	}
 </style>
 
@@ -205,7 +254,6 @@
 				this.startTime = Date.now();
 				this.timer = setInterval(this.updateTimer, 1000);
 			},
-			//https://stackoverflow.com/a/62065826/17996831
 			startRecording() {
 				this.startTimer();
 				const recordedChunks = [];
