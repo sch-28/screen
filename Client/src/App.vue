@@ -8,8 +8,8 @@
 
 <style>
 	::-webkit-scrollbar {
-		width: 1vw;
-		height: 1vh;
+		width: 0.5vw;
+		height: 0.5vh;
 	}
 
 	/* Track */
