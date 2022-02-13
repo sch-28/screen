@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <video id="videoInput" autoplay style="display: none;"></video>
+    <video id="videoPreview" autoplay controls width="600"></video>
+    <canvas id="canvas"></canvas>
+    <button onclick="reset()">Reset</button>
+    <button onclick="startStream()">swap window</button>
+    <button onclick="record()">record</button>
+    <button onclick="stopRecord()">stop</button>
+</body>
+</html>
