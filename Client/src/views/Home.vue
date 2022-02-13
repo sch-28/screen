@@ -154,8 +154,9 @@
 					y: this.rectPreviewHeight / this.canvas.height,
 				};
 				this.rectPreview.endX = this.rectPreview.startX + this.rect.endX * rectPreviewScale.x;
-				this.rectPreview.endY = this.rectPreview.startY + this.rect.endY * rectPreviewScale.y;
-				this.rectPreview.endY = this.rect.startY + (this.rect.endX - this.rect.startX) * 0.5625 * rectPreviewScale.y;
+				this.rectPreview.endY =
+					this.rectPreview.startY +
+					(this.rect.startY + (this.rect.endX - this.rect.startX) * 0.5625) * rectPreviewScale.y;
 				this.rectPreview.startX += this.rect.startX * rectPreviewScale.x;
 				this.rectPreview.startY += this.rect.startY * rectPreviewScale.y;
 				Object.keys(this.rectPreview).forEach((key) => (this.rectPreview[key] = parseInt(this.rectPreview[key])));
