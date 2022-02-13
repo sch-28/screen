@@ -24,6 +24,7 @@
 		},
 		methods: {
 			buttonClick() {
+				if (this.disabled) return;
 				this.clicked = !this.clicked;
 				this.$emit("toggle", this.clicked);
 			},
