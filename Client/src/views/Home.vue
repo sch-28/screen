@@ -7,7 +7,7 @@
 				<canvas ref="canvas"></canvas>
 			</div>
 			<button @click="askForWindow" class="window-button"></button>
-			<span class="duration-span">{{ duration }}</span>
+			<span class="duration-span" ref="duration-span">{{ duration }}</span>
 		</div>
 		<div class="control-wrapper">
 			<recordButton v-model="startRecord" @toggle="toggleRecording()" :disabled="!videoStreamSrc" />
@@ -18,8 +18,8 @@
 
 <style scoped>
 	canvas {
-		width: 1250px;
-		height: 703.13px;
+		max-width: 1250px !important;
+		max-height: 703.13px !important;
 		display: block;
 		background: #272727;
 	}
@@ -54,6 +54,9 @@
 		bottom: -30px;
 		color: lightgray;
 		right: 0;
+	}
+	.duration-span.hidden {
+		display: none;
 	}
 
 	.canvas-wrapper .window-button:hover {
@@ -203,16 +206,30 @@
 					y: this.rectPreviewHeight / this.canvas.height,
 				};
 				this.rectPreview.endX = this.rectPreview.startX + this.rect.endX * rectPreviewScale.x;
-				this.rectPreview.endY =
+				this.rectPreview.endY = this.rectPreview.startY + this.rect.endY * rectPreviewScale.y;
+				/* this.rectPreview.endY =
 					this.rectPreview.startY +
-					(this.rect.startY + (this.rect.endX - this.rect.startX) * 0.5625) * rectPreviewScale.y;
+					(this.rect.startY + (this.rect.endX - this.rect.startX) * 0.5625) * rectPreviewScale.y; */
 				this.rectPreview.startX += this.rect.startX * rectPreviewScale.x;
 				this.rectPreview.startY += this.rect.startY * rectPreviewScale.y;
 				Object.keys(this.rectPreview).forEach((key) => (this.rectPreview[key] = parseInt(this.rectPreview[key])));
 				this.mouseDown = false;
+				this.resizeCanvas(this.rectPreviewWidth, this.rectPreviewHeight);
 			},
 			reset() {
 				this.rectPreview = { startX: 0, startY: 0, endX: 1920, endY: 1080 };
+				this.resizeCanvas(this.rectPreviewWidth, this.rectPreviewHeight);
+			},
+			resizeCanvas(width, height) {
+				this.canvas.style.width = width + "px";
+				this.canvas.style.height = height + "px";
+				this.canvas.width = width;
+				this.canvas.height = height;
+				if (this.canvas.width < 150) {
+					this.$refs["duration-span"].classList.add("hidden");
+				} else {
+					this.$refs["duration-span"].classList.remove("hidden");
+				}
 			},
 			draw() {
 				if (this.rectPreviewHeight == 0 || this.rectPreviewWidth == 0) this.reset();
@@ -232,11 +249,17 @@
 				if (this.mouseDown) {
 					this.ctx.strokeStyle = "#2196f3";
 					this.ctx.lineWidth = 5;
-					this.ctx.strokeRect(
+					/* this.ctx.strokeRect(
 						this.rect.startX,
 						this.rect.startY,
 						this.mousePosition.x - this.rect.startX,
 						(this.mousePosition.x - this.rect.startX) * 0.5625
+					); */
+					this.ctx.strokeRect(
+						this.rect.startX,
+						this.rect.startY,
+						this.mousePosition.x - this.rect.startX,
+						this.mousePosition.y - this.rect.startY
 					);
 				}
 				window.requestAnimationFrame(this.draw);
