@@ -128,10 +128,10 @@
 				return this.$refs.canvas.getContext("2d");
 			},
 			rectPreviewHeight() {
-				return this.rectPreview.endY - this.rectPreview.startY;
+				return Math.abs(this.rectPreview.endY - this.rectPreview.startY);
 			},
 			rectPreviewWidth() {
-				return this.rectPreview.endX - this.rectPreview.startX;
+				return Math.abs(this.rectPreview.endX - this.rectPreview.startX);
 			},
 		},
 		components: {
@@ -221,8 +221,6 @@
 				this.resizeCanvas(this.rectPreviewWidth, this.rectPreviewHeight);
 			},
 			resizeCanvas(width, height) {
-				this.canvas.style.width = width + "px";
-				this.canvas.style.height = height + "px";
 				this.canvas.width = width;
 				this.canvas.height = height;
 				if (this.canvas.width < 150) {
